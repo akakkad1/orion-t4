@@ -1,0 +1,8 @@
+opensky-api
+websockets
+pandas
+folium
+airportsdata
+airports
+python-dotenv
+git+https://github.com/openskynetwork/opensky-api.git#subdirectory=python
