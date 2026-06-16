@@ -6,6 +6,7 @@ import pandas as pd            # For data manipulation and CSV I/O
 import folium                  # For creating interactive maps
 from folium.plugins import HeatMap  # Heatmap layer plugin for visualizing vessel density
 import airportsdata            # For ICAO airport code lookup (lat/lon coordinates)
+from airports import airports
 from datetime import datetime, timezone  # For timestamp handling in UTC
 from dotenv import load_dotenv  # For loading environment variables from .env file
 from opensky_api import OpenSkyApi  # OpenSky API wrapper for flight data access
@@ -573,8 +574,55 @@ def main():
     This function runs all data pipeline stages sequentially.
     Each stage produces intermediate CSV files and final HTML maps.
     """
-    airport_1 = input("Enter first ICAO airport code (e.g., KATL): ").strip().upper()  # Get first airport code from user input
-    airport_2 = input("Enter second ICAO airport code (e.g., KJFK): ").strip().upper()  # Get second airport code from user input
+    # Ensure this database loading line is placed somewhere before this block runs
+    airports_db = airportsdata.load('ICAO')
+
+    # --- FIRST AIRPORT ---
+    while True:
+        airport_1 = input("Enter first ICAO airport code (e.g., KATL): ").strip().upper()
+        
+        # Check database validity first
+        a1_data = airports_db.get(airport_1)
+        if not a1_data:
+            print(f"'{airport_1}' is not a valid ICAO airport code. Please check the code and try again.\n")
+            continue  # Restarts loop to prompt user again
+            
+        a1_name = a1_data['name']
+        a1_info = input(f"You have entered airport: {a1_name}. Is this correct? (y/n): ").strip().lower()
+        
+        if a1_info == 'y':
+            print(f"You have selected {a1_name}.\n")
+            break  # Validated and confirmed, break loop to move forward
+        elif a1_info == 'n':
+            print("Please enter the correct ICAO code.\n")
+        else:
+            print("Invalid input. Please enter 'y' for yes or 'n' for no.\n")
+
+    # --- SECOND AIRPORT ---
+    while True:
+        airport_2 = input("Enter second ICAO airport code (e.g., KJFK): ").strip().upper()
+        
+        # Check database validity first
+        a2_data = airports_db.get(airport_2)
+        if not a2_data:
+            print(f"'{airport_2}' is not a valid ICAO airport code. Please check the code and try again.\n")
+            continue  # Restarts loop to prompt user again
+            
+        a2_name = a2_data['name']
+        a2_info = input(f"You have entered airport: {a2_name}. Is this correct? (y/n): ").strip().lower()
+        
+        if a2_info == 'y':
+            print(f"You have selected {a2_name}.\n")
+            break  # Validated and confirmed, break loop to move forward
+        elif a2_info == 'n':
+            print("Please enter the correct ICAO code.\n")
+        else:
+            print("Invalid input. Please enter 'y' for yes or 'n' for no.\n")
+
+    # Your code will naturally continue uninterrupted right below this line
+    # airport_1 and airport_2 hold the validated string codes (e.g., "KATL", "KJFK")
+
+
 
     # ─── OPENSKY  ─────────────────────────────────────────────────────────────
     # Pull, clean, and map flight arrivals at Atlanta Hartsfield-Jackson International
