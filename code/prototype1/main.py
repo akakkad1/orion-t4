@@ -19,7 +19,7 @@ AISSTREAM_API_KEY     = os.getenv("AISSTREAM_API_KEY")      # AISStream API auth
 
 # Create directory structure for raw, cleaned, and visualization output data
 # exist_ok=True prevents errors if directories already exist
-RUN_ID = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Unique identifier for this run (timestamp)
+RUN_ID = datetime.now().strftime("%Y-%m-%d %H%M%S")  # Unique identifier for this run (timestamp)
 
 os.makedirs(f"data/{RUN_ID}/raw",    exist_ok=True) # Store raw API responses
 os.makedirs(f"data/{RUN_ID}/clean",  exist_ok=True) # Store cleaned/processed data
