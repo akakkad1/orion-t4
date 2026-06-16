@@ -33,7 +33,7 @@ Copy `main.py` to a folder on your local machine. Do **not** run it from inside 
 
 ### 2. Install dependencies
 ```bash
-pip install requirements
+pip install -r requirements.txt
 ```
 
 ### 3. Create your `.env` file
