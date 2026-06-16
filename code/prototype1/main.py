@@ -21,9 +21,9 @@ AISSTREAM_API_KEY     = os.getenv("AISSTREAM_API_KEY")      # AISStream API auth
 # exist_ok=True prevents errors if directories already exist
 RUN_ID = datetime.now().strftime("%Y-%m-%d %H%M%S")  # Unique identifier for this run (timestamp)
 
-os.makedirs(f"prototype1/data/{RUN_ID}/raw",    exist_ok=True) # Store raw API responses
-os.makedirs(f"prototype1/data/{RUN_ID}/clean",  exist_ok=True) # Store cleaned/processed data
-os.makedirs(f"prototype1/data/{RUN_ID}/graphs", exist_ok=True) # Store generated HTML map files
+os.makedirs(f"code/prototype1/data/{RUN_ID}/raw",    exist_ok=True) # Store raw API responses
+os.makedirs(f"code/prototype1/data/{RUN_ID}/clean",  exist_ok=True) # Store cleaned/processed data
+os.makedirs(f"code/prototype1/data/{RUN_ID}/graphs", exist_ok=True) # Store generated HTML map files
 
 # Define the time window for historical flight data queries
 # All OpenSky queries will retrieve flight data within this 1-hour window
@@ -119,9 +119,9 @@ def pull_opensky(airport: str) -> pd.DataFrame:
     } for f in arrivals])
 
     # Save raw API response to CSV file (unprocessed, for data integrity backup)
-    df.to_csv(f"prototype1/data/{RUN_ID}/raw/opensky_{airport}_raw.csv", index=False)
+    df.to_csv(f"code/prototype1/data/{RUN_ID}/raw/opensky_{airport}_raw.csv", index=False)
     # Print confirmation with file path and row/column counts (shape)
-    print(f"  Saved raw  → prototype1/data/{RUN_ID}/raw/opensky_{airport}_raw.csv  {df.shape}")
+    print(f"  Saved raw  → code/prototype1/data/{RUN_ID}/raw/opensky_{airport}_raw.csv  {df.shape}")
     
     # Return the DataFrame for further processing
     return df
@@ -175,9 +175,9 @@ def clean_opensky(df: pd.DataFrame, airport: str) -> pd.DataFrame:
                           .dt.total_seconds() / 60).round(1)
     
     # Save cleaned data to CSV file for audit trail
-    df.to_csv(f"prototype1/data/{RUN_ID}/clean/opensky_{airport}_clean.csv", index=False)
+    df.to_csv(f"code/prototype1/data/{RUN_ID}/clean/opensky_{airport}_clean.csv", index=False)
     # Print confirmation with file path and row/column counts
-    print(f"  Saved clean → prototype1/data/{RUN_ID}/clean/opensky_{airport}_clean.csv  {df.shape}")
+    print(f"  Saved clean → code/prototype1/data/{RUN_ID}/clean/opensky_{airport}_clean.csv  {df.shape}")
     
     # Return cleaned DataFrame for further processing (mapping)
     return df
@@ -293,7 +293,7 @@ def graph_opensky(df: pd.DataFrame, airport: str):
         drawn.add(dep)
 
     # Save the map as an interactive HTML file
-    path = f"prototype1/data/{RUN_ID}/graphs/opensky_{airport}_map.html"
+    path = f"code/prototype1/data/{RUN_ID}/graphs/opensky_{airport}_map.html"
     m.save(path)
     
     # Print confirmation with file path and number of routes visualized
@@ -403,8 +403,8 @@ def pull_ais(bbox: list) -> pd.DataFrame:
         print("[AIS] No records collected.")
         return pd.DataFrame()
     df = pd.DataFrame(records)
-    df.to_csv("prototype1/data/{RUN_ID}/raw/ais_raw.csv", index=False)
-    print(f"  Saved raw  → prototype1/data/{RUN_ID}/raw/ais_raw.csv  {df.shape}")
+    df.to_csv("code/prototype1/data/{RUN_ID}/raw/ais_raw.csv", index=False)
+    print(f"  Saved raw  → code/prototype1/data/{RUN_ID}/raw/ais_raw.csv  {df.shape}")
     return df
 
 
@@ -448,10 +448,10 @@ def clean_ais(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df["sog"].isna() | (df["sog"] <= 50)]
     
     # Save cleaned data to CSV file (processed and validated)
-    df.to_csv("prototype1/data/{RUN_ID}/clean/ais_clean.csv", index=False)
+    df.to_csv("code/prototype1/data/{RUN_ID}/clean/ais_clean.csv", index=False)
     
     # Print confirmation with file path and data shape (rows, columns)
-    print(f"  Saved clean → prototype1/data/{RUN_ID}/clean/ais_clean.csv  {df.shape}")
+    print(f"  Saved clean → code/prototype1/data/{RUN_ID}/clean/ais_clean.csv  {df.shape}")
     
     # Return cleaned DataFrame for visualization/mapping
     return df
@@ -551,10 +551,10 @@ def graph_ais(df: pd.DataFrame):
     m.get_root().html.add_child(folium.Element(legend_html))
 
     # Save the interactive map as an HTML file that can be opened in browser
-    m.save("prototype1/data/{RUN_ID}/graphs/ais_map.html")
+    m.save("code/prototype1/data/{RUN_ID}/graphs/ais_map.html")
     
     # Print confirmation with file path and number of vessels mapped
-    print(f"  Saved map  → prototype1/data/{RUN_ID}/graphs/ais_map.html  ({len(df)} vessels)")
+    print(f"  Saved map  → code/prototype1/data/{RUN_ID}/graphs/ais_map.html  ({len(df)} vessels)")
 
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
