@@ -10,6 +10,7 @@ load_dotenv()
 OPENSKY_CLIENT_ID = os.getenv("OPENSKY_CLIENT_ID")
 OPENSKY_CLIENT_SECRET = os.getenv("OPENSKY_CLIENT_SECRET")
 AISSTREAM_API_KEY = os.getenv("AISSTREAM_API_KEY")
+print("AIS key loaded:", AISSTREAM_API_KEY[:10] if AISSTREAM_API_KEY else None)
 
 # OpenSky
 api = OpenSkyApi(client_id=OPENSKY_CLIENT_ID, client_secret=OPENSKY_CLIENT_SECRET)
