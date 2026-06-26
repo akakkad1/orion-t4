@@ -1,2 +1,9 @@
 .env
 data/
+
+# generated outputs
+outputs/
+__pycache__/
+*.pyc
+.DS_Store
+code/.DS_Store
